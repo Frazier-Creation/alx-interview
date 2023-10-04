@@ -5,17 +5,22 @@
 
 
 def canUnlockAll(boxes):
-    """Determines if boxes can be unlocked"""
-    position = 0
-    unlocked = {}
+    # Set to keep track of the opened boxes
+    opened_boxes = {0}
+    
+    # Queue to perform breadth-first search
+    queue = [0]
+    
+    # Breadth-first search
+    while queue:
+        current_box = queue.pop(0)
+        keys = boxes[current_box]
+        
+        for key in keys:
+            if key not in opened_boxes and key < len(boxes):
+                opened_boxes.add(key)
+                queue.append(key)
 
-    for box in boxes:
-        if len(box) == 0 or position == 0:
-            unlocked[position] = "always_unlocked"
-        for key in box:
-            if key < len(boxes) and key != position:
-                unlocked[key] = key
-        if len(unlocked) == len(boxes):
-            return True
-        position += 1
-    return False
+    # Check if all boxes have been opened
+    return len(opened_boxes) == len(boxes)
+
